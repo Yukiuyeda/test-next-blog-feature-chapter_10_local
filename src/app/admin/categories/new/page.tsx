@@ -23,7 +23,7 @@ const Page = () => {
     const { id } = await res.json(); 
 
     //作成したカテゴリー詳細ページに遷移
-    router.push(`/admin/categories/${id}`)
+    router.push(`./admin/categories/${id}`)
 
     window.alert("カテゴリー作成しました");
 
@@ -39,8 +39,8 @@ const Page = () => {
         <input
           id="name"
           name="name"
-          onChange={(e) => setName(e.target.value)}
           value={name}
+          onChange={(e) => setName(e.target.value)}
           className="p-3 border-gray-400 border rounded-sm mt-2 mb-4 w-[300px]"
         />
         {/* 作成ボタン */}

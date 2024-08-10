@@ -12,7 +12,7 @@ export const GET = async (
   try {
     const { id } = params;
     const post = await prisma.post.findUnique({ where: { id: parseInt(id) } });
-    //確認用ログ
+   
     // console.log(post);
 
     // レスポンスを返す

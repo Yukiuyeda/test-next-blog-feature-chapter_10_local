@@ -1,7 +1,8 @@
 {
   "/page": "app/page.js",
-  "/admin/posts/new/page": "app/admin/posts/new/page.js",
+  "/api/admin/categories/route": "app/api/admin/categories/route.js",
+  "/api/admin/categories/[id]/route": "app/api/admin/categories/[id]/route.js",
   "/admin/categories/page": "app/admin/categories/page.js",
-  "/admin/categories/new/page": "app/admin/categories/new/page.js",
-  "/admin/categories/[id]/page": "app/admin/categories/[id]/page.js"
+  "/admin/categories/[id]/page": "app/admin/categories/[id]/page.js",
+  "/admin/posts/page": "app/admin/posts/page.js"
 }

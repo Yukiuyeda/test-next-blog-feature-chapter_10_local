@@ -1,18 +1,31 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Page = () => {
   const [name, setName] = useState<string>("");
   const { id } = useParams();
   const router = useRouter();
 
+  //input欄に現在のカテゴリーを表示
+  useEffect(() => {
+    const fetcher = async () => {
+      const res = await fetch(`/api/admin/categories/${id}`);
+      const { category } = await res.json();
+      // console.log(category);
+
+      setName(category.name);
+    };
+
+    fetcher();
+  }, []);
+
+  //カテゴリー作成
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    //カテゴリー作成
-    await fetch(`/admin/categories/${id}`, {
+    await fetch(`/api/admin/categories/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -21,20 +34,21 @@ const Page = () => {
     });
 
     window.alert("カテゴリーを更新しました");
+
+    //カテゴリー一覧に画面遷移
+    router.push("/admin/categories");
   };
 
   //カテゴリー削除
   const handleDelete = async () => {
- 
-    await fetch(`/admin/categories/${id}`,{
-      method: 'DELETE'
-    }
-    )
+    await fetch(`/api/admin/categories/${id}`, {
+      method: "DELETE",
+    });
 
-    window.alert("カテゴリーを削除しました")
+    window.alert("カテゴリーを削除しました");
 
-    router.push('/admin/categories')
-  }
+    router.push("/admin/categories");
+  };
 
   return (
     <div>
@@ -61,7 +75,7 @@ const Page = () => {
 
           <button
             type="button"
-            className="flex justify-center w-[70px] mt-10 ml-4 py-2 px-4 text-white border-gray-400 bg-red-500 rounded hover:cursor hover:bg-green-700 transition-all"
+            className="flex justify-center w-[70px] mt-10 ml-4 py-2 px-4 text-white border-gray-400 bg-red-500 rounded hover:cursor hover:bg-red-700 transition-all"
             onClick={handleDelete}
           >
             削除

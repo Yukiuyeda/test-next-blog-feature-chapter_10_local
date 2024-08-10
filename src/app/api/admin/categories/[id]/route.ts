@@ -9,6 +9,8 @@ export const PUT = async (
   request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
+
+  //paramsの中のidを取り出す
   const { id } = params;
 
   const body = await request.json();
@@ -49,3 +51,22 @@ export const DELETE = async (
       return NextResponse.json({ status: error.message }, { status: 400 });
   }
 };
+
+//カテゴリー取得API
+export const GET = async (
+  request: NextRequest,
+  { params }: { params: {id: string }}
+) => {
+  const { id } = params;
+
+  try{
+    const category = await prisma.category.findUnique(
+      {where: { id: parseInt(id)}}
+    )
+
+    return NextResponse.json({ status: "OK", category }, { status: 200 });
+  } catch(error) {
+    if (error instanceof Error)
+      return NextResponse.json({ status: error.message }, { status: 400 });
+  }
+}

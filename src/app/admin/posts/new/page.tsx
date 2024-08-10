@@ -9,7 +9,7 @@ const Page = () => {
     title: "",
     content: "",
     thumbnailUrl: "https://placehold.jp/800x400.png",
-    selectedcategories: [],
+    categories: [],
   });
 
   const handleChange = (
@@ -41,8 +41,9 @@ const Page = () => {
   //カテゴリーリストを取得
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch("./api/admin/categories");
+      const res = await fetch("/api/admin/categories");
       const { categories } = await res.json();
+      console.log(categories);
       setCategories(categories);
     };
 
