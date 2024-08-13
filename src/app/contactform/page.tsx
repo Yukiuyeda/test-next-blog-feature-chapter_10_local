@@ -96,7 +96,7 @@ const ContactForm: React.FC = () => {
 
   return (
     <div className="flex justify-center">
-      <form className="max-w-[800px] w-full py-10" onSubmit={handleSubmit}>
+      <form className="max-w-[800px] w-full py-10 px-4" onSubmit={handleSubmit}>
         <div className="text-lg font-bold mb-10">問合わせフォーム</div>
 
         {/* 名前 */}

@@ -61,7 +61,7 @@ const Page = () => {
 
     window.alert("記事を更新しました");
 
-    console.log(formValues)
+    // console.log(formValues)
 
     //記事一覧に画面遷移
     router.push("/admin/posts");

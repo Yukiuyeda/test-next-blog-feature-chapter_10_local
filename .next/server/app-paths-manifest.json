@@ -1,10 +1,7 @@
 {
-  "/api/admin/categories/route": "app/api/admin/categories/route.js",
-  "/api/admin/posts/route": "app/api/admin/posts/route.js",
-  "/api/admin/posts/[id]/route": "app/api/admin/posts/[id]/route.js",
-  "/admin/posts/page": "app/admin/posts/page.js",
+  "/page": "app/page.js",
+  "/posts/[id]/page": "app/posts/[id]/page.js",
+  "/contactform/page": "app/contactform/page.js",
   "/admin/posts/[id]/page": "app/admin/posts/[id]/page.js",
-  "/admin/categories/page": "app/admin/categories/page.js",
-  "/admin/categories/[id]/page": "app/admin/categories/[id]/page.js",
-  "/admin/categories/new/page": "app/admin/categories/new/page.js"
+  "/admin/posts/page": "app/admin/posts/page.js"
 }

@@ -35,14 +35,14 @@ const Page = () => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...formValues }),
+      body: JSON.stringify({ ...formValues, categories}),
     })
 
-    // レスポンスから作成した記事のIDを取得します。
-    const { id } = await res.json()
+    // // レスポンスから作成した記事のIDを取得します。
+    // const { id } = await res.json()
 
-    // 作成した記事の詳細ページに遷移します。
-    router.push(`/admin/posts/${id}`)
+    // 作成した記事の一覧ページに遷移します。
+    router.push("/admin/posts")
 
     alert('記事を作成しました。')
   }
@@ -67,8 +67,8 @@ const Page = () => {
           内容
         </label>
         <textarea
-          id="title"
-          name="title"
+          id="content"
+          name="content"
           onChange={handleChange}
           value={formValues.content}
           className="p-3 border-gray-400 border rounded-sm mt-2 mb-4"

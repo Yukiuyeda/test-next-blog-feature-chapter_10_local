@@ -14,9 +14,7 @@ export const DetailPost: React.FC = () => {
   // APIでpostsを取得する処理をuseEffectで実行します。
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch(
-        `https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}`
-      );
+      const res = await fetch(`/api/posts/${id}`);
       const data: { post: Post } = await res.json();
       setPost(data.post);
       setIsLoading(false);
@@ -44,19 +42,19 @@ export const DetailPost: React.FC = () => {
             {new Date(post.createdAt).toLocaleDateString()}
           </p>
           <ul className="flex">
-            {post.categories.map((category) => {
+            {post.postCategories.map((pc) => {
               return (
                 <li
-                  key={category}
+                  key={pc.category.id}
                   className="text-[#0068D3] border border-[#0068D3] text-[0.8rem] rounded p-[5px] mr-2"
                 >
-                  {category}
+                  {pc.category.name}
                 </li>
               );
             })}
           </ul>
         </div>
-        <h3 className="text-2xl mb-4 font-normal mt-2">{`APIで取得した${post.title}`}</h3>
+        <h3 className="text-2xl mb-4 font-normal mt-2">{post.title}</h3>
         <div
           className="detailContent"
           dangerouslySetInnerHTML={{ __html: post.content }}
