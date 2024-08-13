@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
+
+
 //管理者用全記事取得API
 export const GET = async (request: NextRequest) => {
   try {

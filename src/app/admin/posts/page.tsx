@@ -9,15 +9,15 @@ const Page = () => {
 
 
 
-  // useEffect(() => {
-  //   const getAllPosts = async () => {
-  //     const res = await fetch("http://localhost:3000/api/admin/posts");
-  //     const { _posts } = await res.json();
-  //     setPosts(_posts);
-  //   };
+  useEffect(() => {
+    const fetcher = async () => {
+      const res = await fetch("/api/admin/posts");
+      const { posts } = await res.json();
+      setPosts(posts);
+    };
 
-  //   getAllPosts()
-  // }, []);
+    fetcher()
+  }, []);
 
   console.log(posts);
 
@@ -36,8 +36,8 @@ const Page = () => {
         {posts.map((post) => {
           return (
             <li key={post.id}>
-              <Link href={`{/admin/posts/${post.id}`}>
-                <div className="p-4 border-b-[1px] border-blue-300">
+              <Link href={`/admin/posts/${post.id}`}>
+                <div className="p-4 border-b-[1px] border-blue-300  hover:bg-gray-200 hover:cursor-pointer">
                   <h3 className="font-bold text-xl">{post.title}</h3>
                   <p className="text-[12px] text-gray-600">
                     {new Date(post.createdAt).toLocaleDateString()}

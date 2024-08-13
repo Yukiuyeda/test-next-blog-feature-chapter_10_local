@@ -4,5 +4,5 @@ export type NewPost = {
   title: string;
   content: string;
   thumbnailUrl: string;
-  categories: Category[];
+  categories?: Category[];
 };

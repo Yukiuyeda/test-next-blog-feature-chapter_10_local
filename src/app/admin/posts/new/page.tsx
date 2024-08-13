@@ -3,14 +3,19 @@
 import { Category } from "@/app/types/category";
 import { NewPost } from "@/app/types/newpost";
 import React, { SelectHTMLAttributes, useEffect, useState } from "react";
+import CategoriesSelect from "../_components/CategoriesSelect";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [formValues, setFormValues] = useState<NewPost>({
     title: "",
     content: "",
     thumbnailUrl: "https://placehold.jp/800x400.png",
-    categories: [],
   });
+
+  const [categories, setCategories] = useState<Category[]>([])
+
+  const router = useRouter();
 
   const handleChange = (
     e:
@@ -20,40 +25,33 @@ const Page = () => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
 
-  //カテゴリーの変更を反映
-  const handleCategories = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    //選択値を格納するための配列
-    const _categories = [];
-    //<option>要素を走査
-    const opts = e.target.options;
-    for (const opt of opts) {
-      if (opt.selected) {
-        _categories.push(opt.value);
-      }
+  const handleSubmit = async (e: React.FormEvent) => {
+    // フォームのデフォルトの動作をキャンセルします。
+    e.preventDefault()
 
-      //配列をstateに反映
-      setFormValues({ ...formValues, [e.target.name]: _categories });
-    }
-  };
+    // 記事を作成します。
+    const res = await fetch('/api/admin/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...formValues }),
+    })
 
-  const [categories, setCategories] = useState<Category[]>([]);
+    // レスポンスから作成した記事のIDを取得します。
+    const { id } = await res.json()
 
-  //カテゴリーリストを取得
-  useEffect(() => {
-    const fetcher = async () => {
-      const res = await fetch("/api/admin/categories");
-      const { categories } = await res.json();
-      console.log(categories);
-      setCategories(categories);
-    };
+    // 作成した記事の詳細ページに遷移します。
+    router.push(`/admin/posts/${id}`)
 
-    fetcher();
-  }, []);
+    alert('記事を作成しました。')
+  }
+ 
 
   return (
     <div>
       <h2 className="font-bold text-xl mb-6">記事作成ページ</h2>
-      <form className="flex flex-col">
+      <form className="flex flex-col" onSubmit={handleSubmit}>
         <label htmlFor="title" className="text-sm text-gray-700">
           タイトル
         </label>
@@ -90,21 +88,7 @@ const Page = () => {
         <label htmlFor="categories" className="text-sm text-gray-700">
           カテゴリー
         </label>
-        <select
-          id="categories"
-          name="categories"
-          value={formValues.categories}
-          multiple={true}
-          onChange={handleCategories}
-          size={4}
-          className="p-3 border-gray-400 border rounded-sm mt-2 mb-4"
-        >
-          {categories.map((category) => (
-            <option value={category.name} key={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+        <CategoriesSelect selected={categories} setSelected={setCategories}/>
         {/* 
         記事投稿ボタン */}
         <button

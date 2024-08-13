@@ -9,10 +9,25 @@ export const GET = async (
   request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
+  const { id } = params;
+
   try {
-    const { id } = params;
-    const post = await prisma.post.findUnique({ where: { id: parseInt(id) } });
-   
+    const post = await prisma.post.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        postCategories: {
+          include: {
+            category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
     // console.log(post);
 
     // レスポンスを返す
@@ -36,11 +51,37 @@ export const PUT = async (
   const { title, content, categories, thumbnailUrl } = body;
 
   try {
+    //idを指定して、Postを更新
     const post = await prisma.post.update({
-      where: { id: parseInt(id) },
-      data: { title, content, thumbnailUrl },
+      where: {
+        id: parseInt(id),
+      },
+      data: {
+        title,
+        content,
+        thumbnailUrl,
+      },
     });
 
+    //一旦、記事とカテゴリーの中間テーブルのレコードをすべて削除
+    await prisma.postCategory.deleteMany({
+      where: {
+        postId: parseInt(id),
+      },
+    });
+
+    // 記事とカテゴリーの中間テーブルのレコードをDBに生成
+    // 本来複数同時生成には、createManyというメソッドがあるが、sqliteではcreateManyが使えないので、for文1つずつ実施
+    for (const category of categories) {
+      await prisma.postCategory.create({
+        data: {
+          postId: post.id,
+          categoryId: category.id,
+        },
+      });
+    }
+
+    //レスポンスを返す
     return NextResponse.json({ status: "OK", post }, { status: 200 });
   } catch (error) {
     if (error instanceof Error)

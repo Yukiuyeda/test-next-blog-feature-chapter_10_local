@@ -47,6 +47,7 @@ const Page = () => {
 
     window.alert("カテゴリーを削除しました");
 
+    //カテゴリー一覧に画面遷移
     router.push("/admin/categories");
   };
 

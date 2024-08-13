@@ -38,7 +38,9 @@ export const POST = async (request: Request, context: any) => {
 export const GET = async (request: NextRequest) => {
   try {
     const categories = await prisma.category.findMany({
-      orderBy: {createdAt: "desc"}
+      orderBy: {
+        createdAt: "desc", //作成日時の降順で取得
+      },
     });
 
     console.log(categories);
@@ -46,7 +48,7 @@ export const GET = async (request: NextRequest) => {
     return NextResponse.json({ status: "OK", categories }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
-    //   console.log(error.message);
+      //   console.log(error.message);
       return NextResponse.json({ status: error.message }, { status: 400 });
     }
   }

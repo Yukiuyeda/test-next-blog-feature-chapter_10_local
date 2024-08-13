@@ -23,7 +23,7 @@ const Page = () => {
     const { id } = await res.json(); 
 
     //作成したカテゴリー詳細ページに遷移
-    router.push(`./admin/categories/${id}`)
+    router.push("/admin/categories")
 
     window.alert("カテゴリー作成しました");
 

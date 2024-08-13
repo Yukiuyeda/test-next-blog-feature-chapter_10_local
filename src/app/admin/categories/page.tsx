@@ -19,7 +19,7 @@ const Page = () => {
     getAllCategories()
   }, []);
 
-  console.log(categories);
+//   console.log(categories);
 
   return (
     <div>
