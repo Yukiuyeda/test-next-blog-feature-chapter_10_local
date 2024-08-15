@@ -1,11 +1,11 @@
 "use client";
 
-import { Category } from "@/app/types/category";
-import { NewPost } from "@/app/types/newpost";
-import React, { SelectHTMLAttributes, useEffect, useState } from "react";
+import { Category } from "@/app/_types/category";
+import { NewPost } from "@/app/_types/newpost";
+import { useState, useEffect } from "react";
 import CategoriesSelect from "../_components/CategoriesSelect";
 import { useParams, useRouter } from "next/navigation";
-import { Post } from "@/app/types/post";
+import { Post } from "@/app/_types/post";
 
 const Page = () => {
   const [formValues, setFormValues] = useState<NewPost>({
@@ -31,17 +31,22 @@ const Page = () => {
   useEffect(() => {
     const fetcher = async () => {
       const res = await fetch(`/api/admin/posts/${id}`);
-      const { post }: {post: Post}= await res.json();
+      console.log(res);
 
-      console.log(post);
+      const {
+        post: { title, content, thumbnailUrl, postCategories },
+      }: { post: Post } = await res.json();
+
+      // console.log(post);
+
       setFormValues({
         ...formValues,
-        title: post.title,
-        content: post.content,
-        thumbnailUrl: post.thumbnailUrl,
+        title,
+        content,
+        thumbnailUrl,
       });
 
-      setCategories(post.postCategories.map(elem => elem.category))
+      setCategories(postCategories.map((elem) => elem.category));
     };
 
     fetcher();
@@ -120,7 +125,7 @@ const Page = () => {
           カテゴリー
         </label>
         {/* カテゴリー選択コンポーネント */}
-        <CategoriesSelect selected={categories} setSelected={setCategories}/>
+        <CategoriesSelect selected={categories} setSelected={setCategories} />
 
         {/* 更新ボタン */}
         <div className="flex">

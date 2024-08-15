@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import type { Post } from "@/app/types/post";
+import type { Post } from "@/app/_types/post";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 

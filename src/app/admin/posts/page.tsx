@@ -1,13 +1,11 @@
 "use client";
 
-import { Post } from "@/app/types/post";
+import { Post } from "@/app/_types/post";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-
-
 
   useEffect(() => {
     const fetcher = async () => {
@@ -16,7 +14,7 @@ const Page = () => {
       setPosts(posts);
     };
 
-    fetcher()
+    fetcher();
   }, []);
 
   console.log(posts);
@@ -47,7 +45,6 @@ const Page = () => {
             </li>
           );
         })}
-
       </ul>
     </div>
   );

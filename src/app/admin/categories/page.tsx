@@ -1,6 +1,6 @@
 "use client";
 
-import { Category } from "@/app/types/category";
+import { Category } from "@/app/_types/category";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -16,10 +16,10 @@ const Page = () => {
       setCategories(categories);
     };
 
-    getAllCategories()
+    getAllCategories();
   }, []);
 
-//   console.log(categories);
+  //   console.log(categories);
 
   return (
     <div>
@@ -45,7 +45,6 @@ const Page = () => {
           );
         })}
       </ul>
-
     </div>
   );
 };

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 // import { posts } from '../../data/posts';
 import Link from "next/link";
-import { Post } from "@/app/types/post";
+import { Post } from "@/app/_types/post";
 
 const Main: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -53,7 +53,9 @@ const Main: React.FC = () => {
                         })}
                       </ul>
                     </div>
-                    <div className="text-black mt-2 mb-4 text-[24px]">{post.title}</div>
+                    <div className="text-black mt-2 mb-4 text-[24px]">
+                      {post.title}
+                    </div>
                     <div
                       className="text-black max-h-12 overflow-hidden"
                       dangerouslySetInnerHTML={{ __html: post.content }}

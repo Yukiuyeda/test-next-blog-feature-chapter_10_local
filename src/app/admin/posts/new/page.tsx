@@ -1,7 +1,7 @@
 "use client";
 
-import { Category } from "@/app/types/category";
-import { NewPost } from "@/app/types/newpost";
+import { Category } from "@/app/_types/category";
+import { NewPost } from "@/app/_types/newpost";
 import React, { SelectHTMLAttributes, useEffect, useState } from "react";
 import CategoriesSelect from "../_components/CategoriesSelect";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ const Page = () => {
     thumbnailUrl: "https://placehold.jp/800x400.png",
   });
 
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const router = useRouter();
 
@@ -27,26 +27,25 @@ const Page = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     // フォームのデフォルトの動作をキャンセルします。
-    e.preventDefault()
+    e.preventDefault();
 
     // 記事を作成します。
-    const res = await fetch('/api/admin/posts', {
-      method: 'POST',
+    const res = await fetch("/api/admin/posts", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...formValues, categories}),
-    })
+      body: JSON.stringify({ ...formValues, categories }),
+    });
 
     // // レスポンスから作成した記事のIDを取得します。
     // const { id } = await res.json()
 
     // 作成した記事の一覧ページに遷移します。
-    router.push("/admin/posts")
+    router.push("/admin/posts");
 
-    alert('記事を作成しました。')
-  }
- 
+    alert("記事を作成しました。");
+  };
 
   return (
     <div>
@@ -88,7 +87,7 @@ const Page = () => {
         <label htmlFor="categories" className="text-sm text-gray-700">
           カテゴリー
         </label>
-        <CategoriesSelect selected={categories} setSelected={setCategories}/>
+        <CategoriesSelect selected={categories} setSelected={setCategories} />
         {/* 
         記事投稿ボタン */}
         <button

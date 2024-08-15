@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Select, { Props, SelectOptionActionMeta } from "react-select";
-import { Category } from "@/app/types/category";
+import { Category } from "@/app/_types/category";
 
 //コンポーネントのProps
 export type CategoriesSelectProps = {
@@ -47,19 +47,18 @@ const CategoriesSelect: React.FC<CategoriesSelectProps> = ({
   useEffect(() => {
     const fetcher = async () => {
       const res = await fetch("/api/admin/categories");
-      const { categories }  = await res.json();
+      const { categories } = await res.json();
       setCategories(categories);
     };
     fetcher();
   }, []);
 
-  console.log(categories)
+  console.log(categories);
 
   const value = selected.map(convertToOption);
 
-
   const handleChange = (selectedValue: readonly CategoryOption[]): void => {
-    setSelected(selectedValue.map(convertToCategory))
+    setSelected(selectedValue.map(convertToCategory));
   };
 
   return (
