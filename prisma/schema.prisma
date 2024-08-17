@@ -6,11 +6,17 @@ generator client {
   provider = "prisma-client-js"
 }
 
+
 //自動生成（データソースの設定、urlの場所を示している、環境変数ファイルの.envから値を取得）
+//SupabaseのデータベースはPostgreSQLになるから、Prismaの設定も変更する
 datasource db {
-  provider = "sqlite"
+  // ① providerを "postgresql" に書き換える
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+  // ② directURLを追加する
+  directUrl = env("DIRECT_URL")
 }
+
 
 // ブログ記事テーブル
 model Post {
