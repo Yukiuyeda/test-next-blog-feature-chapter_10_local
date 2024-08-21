@@ -1,13 +1,15 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { useSupabaseSession } from "../_hooks/useSupabaseSession";
 import { supabase } from "@/utils/supabase";
 
 const Header: React.FC = () => {
-const handleLogout = async() => {
-  await supabase.auth.signOut()
-  window.location.href = '/'
-}
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/";
+  };
 
   const { session, isLoading } = useSupabaseSession();
 
@@ -18,7 +20,9 @@ const handleLogout = async() => {
         <>
           {session ? (
             <>
-              <Link href="/admin" className="mr-5">管理画面</Link>
+              <Link href="/admin" className="mr-5">
+                管理画面
+              </Link>
               <button onClick={handleLogout}>ログアウト</button>
             </>
           ) : (

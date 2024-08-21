@@ -2,10 +2,19 @@
 
 import Link from "next/link";
 import { ReactNode } from "react";
+import { useRouteGuard } from "../_hooks/useRouteGuard";
+import { usePathname } from "next/navigation";
 
 export default function AdminLayout(
     { children }: { children: ReactNode}
 ) {
+  useRouteGuard()
+
+  const pathname = usePathname()
+  const isSelected = (href: string) => {
+    return pathname.includes(href)
+  }
+  
   return (
     <div className="flex">
     {/* サイドバー */}
