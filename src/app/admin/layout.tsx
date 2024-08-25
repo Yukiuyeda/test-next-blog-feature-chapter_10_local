@@ -5,34 +5,49 @@ import { ReactNode } from "react";
 import { useRouteGuard } from "../_hooks/useRouteGuard";
 import { usePathname } from "next/navigation";
 
-export default function AdminLayout(
-    { children }: { children: ReactNode}
-) {
-  useRouteGuard()
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  useRouteGuard();
 
-  const pathname = usePathname()
+  const pathname = usePathname();
+  //pathnameに格納されるのは/admin/posts or /admin/categories
+
   const isSelected = (href: string) => {
-    return pathname.includes(href)
-  }
-  
+    return pathname.includes(href);
+    //true or falseを返す
+  };
+
   return (
     <div className="flex">
-    {/* サイドバー */}
+      {/* サイドバー */}
       <aside className="min-h-screen bg-gray-200 w-25% min-w-[250px]">
         <nav>
           <ul className="leading-[60px] ">
             <li className="h-[60px]">
-              <Link href="/admin/posts" className="pl-6 block hover:cursor-pointer hover:bg-blue-200">記事一覧</Link>
+              <Link
+                href="/admin/posts"
+                className={`pl-6 block hover:cursor-pointer hover:bg-blue-200 ${
+                  isSelected("/admin/posts") && "bg-blue-200"
+                }`}
+              >
+                記事一覧
+              </Link>
             </li>
             <li className="h-[60px]">
-              <Link href="/admin/categories" className="pl-6 block hover:cursor-pointer hover:bg-blue-200">カテゴリー一覧</Link>
+              <Link
+                href="/admin/categories"
+                className={`pl-6 block hover:cursor-pointer hover:bg-blue-200 ${
+                  isSelected("/admin/categories") && "bg-blue-200"
+                }`}
+              >
+                カテゴリー一覧
+              </Link>
             </li>
           </ul>
         </nav>
       </aside>
 
       {/* コンテンツエリア */}
-        <div className="p-8 flex-1">{ children }</div>
+      <div className="p-8 flex-1">{children}</div>
     </div>
   );
 }

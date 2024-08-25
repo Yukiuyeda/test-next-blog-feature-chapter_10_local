@@ -19,21 +19,22 @@ const Header: React.FC = () => {
       {!isLoading && (
         <>
           {session ? (
-            <>
-              <Link href="/admin" className="mr-5">
+            <div>
+            <Link href="/admin" className="mr-5">
                 管理画面
               </Link>
               <button onClick={handleLogout}>ログアウト</button>
-            </>
+              </div>
+              
           ) : (
-            <>
+            <div>
               <Link href="/contactform" className="mr-5">
                 お問い合わせ
               </Link>
               <Link href="/login">ログイン</Link>
-            </>
-          )}
-        </>
+            </div>
+          )}</>
+        
       )}
     </header>
   );
