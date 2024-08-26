@@ -1,5 +1,6 @@
 "use client";
 
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { Post } from "@/app/types/post";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -7,17 +8,24 @@ import React, { useEffect, useState } from "react";
 const Page = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
-
+  const { token } = useSupabaseSession();
 
   useEffect(() => {
+    if (!token) return 
+
     const fetcher = async () => {
-      const res = await fetch("/api/admin/posts");
+      const res = await fetch("/api/admin/posts",{
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token, //Headerにtokenを付与
+        }
+      });
       const { posts } = await res.json();
       setPosts(posts);
     };
 
-    fetcher()
-  }, []);
+    fetcher();
+  }, [token]);
 
   console.log(posts);
 
@@ -47,7 +55,6 @@ const Page = () => {
             </li>
           );
         })}
-
       </ul>
     </div>
   );
