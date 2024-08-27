@@ -1,5 +1,6 @@
 "use client";
 
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { Category } from "@/app/types/category";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
@@ -7,19 +8,27 @@ import React, { useEffect, useState } from "react";
 const Page = () => {
   const [categories, setCategories] = useState<Category[]>([]);
 
+  //ログイン者にしか知りえないtoken
+  const { token } = useSupabaseSession();
   //全カテゴリー取得
-
   useEffect(() => {
+    if (!token) return;
+
     const getAllCategories = async () => {
-      const res = await fetch("/api/admin/categories");
+      const res = await fetch("/api/admin/categories", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
       const { categories } = await res.json();
       setCategories(categories);
     };
 
-    getAllCategories()
+    getAllCategories();
   }, []);
 
-//   console.log(categories);
+  //   console.log(categories);
 
   return (
     <div>
@@ -45,7 +54,6 @@ const Page = () => {
           );
         })}
       </ul>
-
     </div>
   );
 };

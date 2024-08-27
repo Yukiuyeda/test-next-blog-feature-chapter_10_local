@@ -1,20 +1,24 @@
 "use client";
 
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Page = () => {
   const [name, setName] = useState<string>('');
   const router = useRouter();
+  const { token } = useSupabaseSession();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
 
     //カテゴリー作成
     const res = await fetch("/api/admin/categories", {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
+        Authorization: token!,
       },
       body: JSON.stringify({ name }),
     });
