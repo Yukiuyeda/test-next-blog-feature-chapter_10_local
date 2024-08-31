@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 import { useParams } from "next/navigation";
+import { supabase } from "@/utils/supabase";
 
 const prisma = new PrismaClient();
 
@@ -9,6 +10,16 @@ export const GET = async (
   request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
+  //tokenがnullの場合は''を返す
+  const token = request.headers.get("Authorization") ?? "";
+
+  //Supabaseに対してtokenを送る。
+  const { error } = await supabase.auth.getUser(token);
+
+  //送ったtokenが正しくなかった場合errorが返される
+  if (error)
+    return NextResponse.json({ status: error.message }, { status: 400 });
+
   const { id } = params;
 
   try {
@@ -43,6 +54,16 @@ export const PUT = async (
   request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
+  const token = request.headers.get("Authorization") ?? "";
+
+  //Supabaseに対してtokenを送る。
+  const { error } = await supabase.auth.getUser(token);
+
+  //送ったtokenが正しくなければerrorが返される
+  if (error) {
+    return NextResponse.json({ status: error.message }, { status: 400 });
+  }
+
   //params内のidを取得
   const { id } = params;
 
@@ -94,6 +115,19 @@ export const DELETE = async (
   request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
+  
+
+  const token = request.headers.get("Authorization") ?? "";
+
+  //supabseに対してtokenを送る。
+  const { error } = await supabase.auth.getUser(token);
+
+  //tokenが正しくなければerrorが返却される。
+  if (error) {
+    return NextResponse.json({ status: error.message }, { status: 400 });
+  }
+
+  //paramsの中にidが入っているのでそれを取り出す。
   const { id } = params;
 
   try {

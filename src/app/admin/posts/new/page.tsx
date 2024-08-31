@@ -5,6 +5,7 @@ import { NewPost } from "@/app/types/newpost";
 import React, { SelectHTMLAttributes, useEffect, useState } from "react";
 import CategoriesSelect from "../_components/CategoriesSelect";
 import { useRouter } from "next/navigation";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 const Page = () => {
   const [formValues, setFormValues] = useState<NewPost>({
@@ -16,6 +17,7 @@ const Page = () => {
   const [categories, setCategories] = useState<Category[]>([])
 
   const router = useRouter();
+  const { token } = useSupabaseSession();
 
   const handleChange = (
     e:
@@ -30,10 +32,14 @@ const Page = () => {
     e.preventDefault()
 
     // 記事を作成します。
+
+    if (!token) return;
+    
     const res = await fetch('/api/admin/posts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: token
       },
       body: JSON.stringify({ ...formValues, categories}),
     })

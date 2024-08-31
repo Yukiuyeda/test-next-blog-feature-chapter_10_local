@@ -6,6 +6,7 @@ import React, { SelectHTMLAttributes, useEffect, useState } from "react";
 import CategoriesSelect from "../_components/CategoriesSelect";
 import { useParams, useRouter } from "next/navigation";
 import { Post } from "@/app/types/post";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 const Page = () => {
   const [formValues, setFormValues] = useState<NewPost>({
@@ -18,6 +19,7 @@ const Page = () => {
 
   const { id } = useParams();
   const router = useRouter();
+  const { token } = useSupabaseSession();
 
   const handleChange = (
     e:
@@ -30,7 +32,15 @@ const Page = () => {
   //現状の内容表示
   useEffect(() => {
     const fetcher = async () => {
-      const res = await fetch(`/api/admin/posts/${id}`);
+
+      if (!token) return;
+
+      const res = await fetch(`/api/admin/posts/${id}`, {
+        headers: {
+          'Content-Type': '/application/json',
+          Authorization: token
+        }
+      });
       const { post }: {post: Post}= await res.json();
 
       console.log(post);
@@ -51,10 +61,13 @@ const Page = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!token) return;
+
     await fetch(`/api/admin/posts/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: token,
       },
       body: JSON.stringify({ ...formValues, categories }),
     });
@@ -69,8 +82,15 @@ const Page = () => {
 
   //記事削除
   const handleDelete = async () => {
+
+    if (!token) return;
+    
     await fetch(`/api/admin/posts/${id}`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
     });
 
     window.alert("記事を削除しました");

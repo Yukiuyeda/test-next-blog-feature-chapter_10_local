@@ -7,10 +7,10 @@ const prisma = new PrismaClient();
 
 //カテゴリー追加API
 export const POST = async (request: Request, context: any) => {
-  const token = request.headers.get('Authorization') ?? ''
+  const token = request.headers.get('Authorization') ?? '';
 
   //supabaseに対してtokenを送る
-  const { error } = await supabase.auth.getUser(token)
+  const { error } = await supabase.auth.getUser(token);
   
   //送ったtokenが正しくない場合errorが返されるので、クライアントにもエラーを返す
   if (error) {
@@ -46,6 +46,14 @@ export const POST = async (request: Request, context: any) => {
 
 //カテゴリー一覧取得
 export const GET = async (request: NextRequest) => {
+
+  const token = request.headers.get('Authorization') ?? '';
+const { error } = await supabase.auth.getUser(token);
+
+if( error ) {
+  return NextResponse.json({ status: error.message }, { status: 400 })
+}
+
   try {
     const categories = await prisma.category.findMany({
       orderBy: {

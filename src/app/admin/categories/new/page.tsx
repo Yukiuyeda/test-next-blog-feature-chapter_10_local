@@ -12,13 +12,14 @@ const Page = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!token) return;
 
     //カテゴリー作成
     const res = await fetch("/api/admin/categories", {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
-        Authorization: token!,
+        Authorization: token,
       },
       body: JSON.stringify({ name }),
     });
