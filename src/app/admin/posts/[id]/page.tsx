@@ -12,7 +12,7 @@ const Page = () => {
   const [formValues, setFormValues] = useState<NewPost>({
     title: "",
     content: "",
-    thumbnailUrl: "https://placehold.jp/800x400.png",
+    thumbnailImageKey: "",
   });
 
   const [categories, setCategories] = useState<Category[]>([]);
@@ -41,17 +41,17 @@ const Page = () => {
           Authorization: token
         }
       });
-      const { post }: {post: Post}= await res.json();
+      const { post: { title, content, thumbnailImageKey, postCategories} }: {post: Post}= await res.json();
 
-      console.log(post);
+  
       setFormValues({
         ...formValues,
-        title: post.title,
-        content: post.content,
-        thumbnailUrl: post.thumbnailUrl,
+        title,
+        content,
+        thumbnailImageKey,
       });
 
-      setCategories(post.postCategories.map(elem => elem.category))
+      setCategories(postCategories.map(elem => elem.category))
     };
 
     fetcher();
@@ -84,7 +84,7 @@ const Page = () => {
   const handleDelete = async () => {
 
     if (!token) return;
-    
+
     await fetch(`/api/admin/posts/${id}`, {
       method: "DELETE",
       headers: {
@@ -132,7 +132,6 @@ const Page = () => {
           id="thumbnailUrl"
           name="thumbnailUrl"
           onChange={handleChange}
-          value={formValues.thumbnailUrl}
           className="p-3 border-gray-400 border rounded-sm mt-2 mb-4"
         />
 
