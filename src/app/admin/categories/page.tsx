@@ -22,13 +22,16 @@ const Page = () => {
         },
       });
       const { categories } = await res.json();
+      
       setCategories(categories);
+
+      console.log(categories);
     };
 
     getAllCategories();
   }, []);
 
-  //   console.log(categories);
+  
 
   return (
     <div>

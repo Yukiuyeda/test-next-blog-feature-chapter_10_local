@@ -6,15 +6,17 @@ import React, { SelectHTMLAttributes, useEffect, useState } from "react";
 import CategoriesSelect from "../_components/CategoriesSelect";
 import { useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
+import { supabase } from "@/utils/supabase";
+
 
 const Page = () => {
   const [formValues, setFormValues] = useState<NewPost>({
     title: "",
     content: "",
-    thumbnailUrl: "https://placehold.jp/800x400.png",
+    thumbnailImageKey: "",
   });
 
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const router = useRouter();
   const { token } = useSupabaseSession();
@@ -27,32 +29,63 @@ const Page = () => {
     setFormValues({ ...formValues, [e.target.name]: e.target.value });
   };
 
+  //画像アップロード
+  const handleImageChange = async (
+    e: any
+  ): Promise<void> => {
+    if (!e.target.files || e.target.files.length === 0) {
+      //画像が選択されていないのでreturn
+      return
+    }
+
+    //選択された画像を取得
+    const file = e.target.files[0];
+    //ファイルパスを指定
+    const filePath = `private/${uuidv4()}`
+
+    //Supabaseに画像をアップロード
+    const { data, error } = await supabase.storage
+      .from('post_thumbnail') // ここでバケット名を指定
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: false,
+      })
+
+    // アップロードに失敗したらエラーを表示して終了
+    if (error) {
+      alert(error.message)
+      return
+    }
+
+    // data.pathに、画像固有のkeyが入っているので、thumbnailImageKeyに格納する
+    setFormValues({...formValues, thumbnailImageKey: data.path});
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     // フォームのデフォルトの動作をキャンセルします。
-    e.preventDefault()
+    e.preventDefault();
 
     // 記事を作成します。
 
     if (!token) return;
-    
-    const res = await fetch('/api/admin/posts', {
-      method: 'POST',
+
+    const res = await fetch("/api/admin/posts", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: token
+        "Content-Type": "application/json",
+        Authorization: token,
       },
-      body: JSON.stringify({ ...formValues, categories}),
-    })
+      body: JSON.stringify({ ...formValues, categories }),
+    });
 
     // // レスポンスから作成した記事のIDを取得します。
     // const { id } = await res.json()
 
     // 作成した記事の一覧ページに遷移します。
-    router.push("/admin/posts")
+    router.push("/admin/posts");
 
-    alert('記事を作成しました。')
-  }
- 
+    alert("記事を作成しました。");
+  };
 
   return (
     <div>
@@ -80,21 +113,22 @@ const Page = () => {
           className="p-3 border-gray-400 border rounded-sm mt-2 mb-4"
         ></textarea>
 
-        <label htmlFor="thumnbnailUrl" className="text-sm text-gray-700">
+        <label htmlFor="thumnbnailImageKey" className="text-sm text-gray-700">
           サムネイルURL
         </label>
         <input
-          id="thumbnailUrl"
-          name="thumbnailUrl"
-          onChange={handleChange}
-          value={formValues.thumbnailUrl}
+          type="file"
+          id="thumbnailImageKey"
+          name="thumbnailImageKey"
+          onChange={handleImageChange}
+          accept="image/*"
           className="p-3 border-gray-400 border rounded-sm mt-2 mb-4"
         />
 
         <label htmlFor="categories" className="text-sm text-gray-700">
           カテゴリー
         </label>
-        <CategoriesSelect selected={categories} setSelected={setCategories}/>
+        <CategoriesSelect selected={categories} setSelected={setCategories} />
         {/* 
         記事投稿ボタン */}
         <button
@@ -109,3 +143,7 @@ const Page = () => {
 };
 
 export default Page;
+function uuidv4() {
+  throw new Error("Function not implemented.");
+}
+

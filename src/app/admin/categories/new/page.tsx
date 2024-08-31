@@ -5,18 +5,18 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const Page = () => {
-  const [name, setName] = useState<string>('');
+  const [name, setName] = useState<string>("");
   const router = useRouter();
   const { token } = useSupabaseSession();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    console.log(token);
     if (!token) return;
 
     //カテゴリー作成
     const res = await fetch("/api/admin/categories", {
-      method: 'POST',
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: token,
@@ -25,13 +25,12 @@ const Page = () => {
     });
 
     //カテゴリーのid取得
-    const { id } = await res.json(); 
+    const { id } = await res.json();
 
     //作成したカテゴリー詳細ページに遷移
-    router.push("/admin/categories")
+    router.push("/admin/categories");
 
     window.alert("カテゴリー作成しました");
-
   };
 
   return (

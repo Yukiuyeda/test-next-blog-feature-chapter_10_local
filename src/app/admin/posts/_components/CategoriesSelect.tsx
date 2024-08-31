@@ -55,7 +55,7 @@ const CategoriesSelect: React.FC<CategoriesSelectProps> = ({
 
   console.log(categories)
 
-  const value = selected.map(convertToOption);
+  const value = selected?.map(convertToOption);
 
 
   const handleChange = (selectedValue: readonly CategoryOption[]): void => {
