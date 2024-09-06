@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import type { Post } from "@/app/types/post";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import { supabase } from "@/utils/supabase";
 
 export const DetailPost: React.FC = () => {
   const [post, setPost] = useState<Post | null>(null);
@@ -23,6 +24,27 @@ export const DetailPost: React.FC = () => {
     fetcher();
   }, [id]);
 
+  // Imageタグのsrcにセットする画像URLを持たせるstate
+  const [thumbnailImageUrl, setThumbnailImageUrl] = useState<null | string>(
+    null
+  );
+
+  useEffect(() => {
+    if (!post?.thumbnailImageKey) return; // アップロード時に取得した、thumbnailImageKeyを用いて画像のURLを取得
+
+    const fetcher = async () => {
+      const {
+        data: { publicUrl },
+      } = await supabase.storage
+        .from("post_thumbnail")
+        .getPublicUrl(post.thumbnailImageKey);
+
+      setThumbnailImageUrl(publicUrl);
+    };
+
+    fetcher();
+  }, [post?.thumbnailImageKey]);
+
   //ローディング中の表示
   if (isLoading) {
     return <div>読み込み中…</div>;
@@ -35,7 +57,17 @@ export const DetailPost: React.FC = () => {
 
   return (
     <div className="flex flex-col p-4 max-w-[800px] pt-10 mx-auto my-0">
-      <Image src={post.thumbnailUrl} alt="" width={800} height={400} />
+      // 画像の表示 
+      {thumbnailImageUrl && (
+        <div className="mt-2">
+          <Image
+            src={thumbnailImageUrl}
+            alt="thumbnail"
+            width={400}
+            height={400}
+          />
+        </div>
+      )}
       <div className="pt-0 pr-4 pb-4 pl-4">
         <div className="mt-4 mb-2 flex justify-between items-center h-[27px]">
           <p className="text-[#999] text-[0.8rem]">

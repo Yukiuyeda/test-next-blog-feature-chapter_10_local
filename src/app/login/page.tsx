@@ -22,7 +22,7 @@ export default function Page() {
     if (error) {
       alert("ログインに失敗しました");
     } else {
-      //成功するとerrorはmullになり、管理者ページへ遷移
+      //成功するとerrorはnullになり、管理者ページへ遷移
       router.replace("/admin/posts");
     }
   };

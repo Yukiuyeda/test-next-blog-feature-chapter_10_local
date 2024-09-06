@@ -55,7 +55,7 @@ const Page = () => {
     };
 
     fetcher();
-  }, [id]);
+  }, [id, token]);
 
   //記事更新
   const handleSubmit = async (e: React.FormEvent) => {

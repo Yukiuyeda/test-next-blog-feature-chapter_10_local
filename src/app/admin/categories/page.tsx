@@ -10,6 +10,7 @@ const Page = () => {
 
   //ログイン者にしか知りえないtoken
   const { token } = useSupabaseSession();
+
   //全カテゴリー取得
   useEffect(() => {
     if (!token) return;
@@ -29,7 +30,7 @@ const Page = () => {
     };
 
     getAllCategories();
-  }, []);
+  }, [token]);
 
   
 

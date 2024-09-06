@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Select, { Props, SelectOptionActionMeta } from "react-select";
 import { Category } from "@/app/types/category";
+import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 //コンポーネントのProps
 export type CategoriesSelectProps = {
@@ -43,23 +44,31 @@ const CategoriesSelect: React.FC<CategoriesSelectProps> = ({
 }) => {
   const [categories, setCategories] = useState<Category[]>([]);
 
+  const { token } = useSupabaseSession();
+
   //起動時にcategory一覧取得
   useEffect(() => {
+    if (!token) return;
+
     const fetcher = async () => {
-      const res = await fetch("/api/admin/categories");
-      const { categories }  = await res.json();
+      const res = await fetch("/api/admin/categories", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      });
+      const { categories } = await res.json();
       setCategories(categories);
     };
     fetcher();
-  }, []);
+  }, [token]);
 
-  console.log(categories)
+  console.log(categories);
 
-  const value = selected?.map(convertToOption);
-
+  const value = selected.map(convertToOption);
 
   const handleChange = (selectedValue: readonly CategoryOption[]): void => {
-    setSelected(selectedValue.map(convertToCategory))
+    setSelected(selectedValue.map(convertToCategory));
   };
 
   return (

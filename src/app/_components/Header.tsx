@@ -20,12 +20,11 @@ const Header: React.FC = () => {
         <>
           {session ? (
             <div>
-            <Link href="/admin" className="mr-5">
+              <Link href="/admin" className="mr-5">
                 管理画面
               </Link>
               <button onClick={handleLogout}>ログアウト</button>
-              </div>
-              
+            </div>
           ) : (
             <div>
               <Link href="/contactform" className="mr-5">
@@ -33,8 +32,8 @@ const Header: React.FC = () => {
               </Link>
               <Link href="/login">ログイン</Link>
             </div>
-          )}</>
-        
+          )}
+        </>
       )}
     </header>
   );

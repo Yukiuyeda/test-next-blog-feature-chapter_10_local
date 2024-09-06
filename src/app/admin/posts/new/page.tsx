@@ -7,6 +7,7 @@ import CategoriesSelect from "../_components/CategoriesSelect";
 import { useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { supabase } from "@/utils/supabase";
+import { v4 as uuidv4 } from 'uuid'  // 固有IDを生成するライブラリ
 
 
 const Page = () => {
@@ -56,6 +57,8 @@ const Page = () => {
       alert(error.message)
       return
     }
+
+    console.log(data);
 
     // data.pathに、画像固有のkeyが入っているので、thumbnailImageKeyに格納する
     setFormValues({...formValues, thumbnailImageKey: data.path});
@@ -114,7 +117,7 @@ const Page = () => {
         ></textarea>
 
         <label htmlFor="thumnbnailImageKey" className="text-sm text-gray-700">
-          サムネイルURL
+          サムネイル
         </label>
         <input
           type="file"
@@ -143,7 +146,5 @@ const Page = () => {
 };
 
 export default Page;
-function uuidv4() {
-  throw new Error("Function not implemented.");
-}
+
 
