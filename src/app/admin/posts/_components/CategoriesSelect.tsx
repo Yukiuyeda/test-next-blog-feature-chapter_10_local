@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import Select, { Props, SelectOptionActionMeta } from "react-select";
-import { Category } from "@/app/types/category";
+import { Category } from "@/app/_types/category";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 
 //コンポーネントのProps

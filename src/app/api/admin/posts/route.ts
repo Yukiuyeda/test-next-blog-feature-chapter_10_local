@@ -6,12 +6,12 @@ const prisma = new PrismaClient();
 
 //管理者用全記事取得API
 export const GET = async (request: NextRequest) => {
-
   // ??の左辺がnullなら右辺が返る
   const token = request.headers.get("Authorization") ?? "";
 
   //supabaseに対してtokenを送る
   const { error } = await supabase.auth.getUser(token);
+  console.log(error);
 
   // 送ったtokenが正しくない場合、errorが返却されるので、クライアントにもエラーを返す
   if (error)
@@ -47,8 +47,7 @@ export const GET = async (request: NextRequest) => {
 //管理者用記事投稿API
 // POSTという命名にすることで、POSTリクエストの時にこの関数が呼ばれる
 export const POST = async (request: Request, context: any) => {
-
-  const token = request.headers.get('Authorization') ?? '';
+  const token = request.headers.get("Authorization") ?? "";
 
   //tokenをsupabaseに対して送る
   const { error } = await supabase.auth.getUser(token);
@@ -63,15 +62,15 @@ export const POST = async (request: Request, context: any) => {
     const body = await request.json();
     console.log(body);
 
-    // bodyの中からtitle, content, categories, thumbnailUrlを取り出す
-    const { title, content, categories, thumbnailUrl } = body;
+    // bodyの中からtitle, content, categories, thumbnailImageKeyを取り出す
+    const { title, content, categories, thumbnailImageKey } = body;
 
     // 投稿をDBに生成
     const data = await prisma.post.create({
       data: {
         title,
         content,
-        thumbnailUrl,
+        thumbnailImageKey,
       },
     });
 

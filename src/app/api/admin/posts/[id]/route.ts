@@ -55,9 +55,12 @@ export const PUT = async (
   { params }: { params: { id: string } }
 ) => {
   const token = request.headers.get("Authorization") ?? "";
+  console.log(`tokenは${token}`);
 
   //Supabaseに対してtokenを送る。
   const { error } = await supabase.auth.getUser(token);
+
+  console.log(error);
 
   //送ったtokenが正しくなければerrorが返される
   if (error) {
@@ -69,7 +72,7 @@ export const PUT = async (
 
   //リクエストのbodyを取得
   const body = await request.json();
-  const { title, content, categories, thumbnailUrl } = body;
+  const { title, content, categories, thumbnailImageKey } = body;
 
   try {
     //idを指定して、Postを更新
@@ -80,7 +83,7 @@ export const PUT = async (
       data: {
         title,
         content,
-        thumbnailUrl,
+        thumbnailImageKey: thumbnailImageKey,
       },
     });
 
@@ -115,8 +118,6 @@ export const DELETE = async (
   request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
-  
-
   const token = request.headers.get("Authorization") ?? "";
 
   //supabseに対してtokenを送る。

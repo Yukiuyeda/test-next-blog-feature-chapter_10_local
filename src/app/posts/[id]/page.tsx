@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import type { Post } from "@/app/types/post";
+import type { Post } from "@/app/_types/post";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { supabase } from "@/utils/supabase";
@@ -30,8 +30,11 @@ export const DetailPost: React.FC = () => {
   );
 
   useEffect(() => {
-    if (!post?.thumbnailImageKey) return; // アップロード時に取得した、thumbnailImageKeyを用いて画像のURLを取得
+    console.log("進んだ");
+    if (!post?.thumbnailImageKey) return;
 
+    // アップロード時に取得した、thumbnailImageKeyを用いて画像のURLを取得
+    console.log("進んだ2");
     const fetcher = async () => {
       const {
         data: { publicUrl },
@@ -40,6 +43,8 @@ export const DetailPost: React.FC = () => {
         .getPublicUrl(post.thumbnailImageKey);
 
       setThumbnailImageUrl(publicUrl);
+
+      console.log(thumbnailImageUrl);
     };
 
     fetcher();
@@ -57,7 +62,6 @@ export const DetailPost: React.FC = () => {
 
   return (
     <div className="flex flex-col p-4 max-w-[800px] pt-10 mx-auto my-0">
-      // 画像の表示 
       {thumbnailImageUrl && (
         <div className="mt-2">
           <Image

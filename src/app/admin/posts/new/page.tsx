@@ -1,14 +1,13 @@
 "use client";
 
-import { Category } from "@/app/types/category";
-import { NewPost } from "@/app/types/newpost";
+import { Category } from "@/app/_types/category";
+import { NewPost } from "@/app/_types/newpost";
 import React, { SelectHTMLAttributes, useEffect, useState } from "react";
 import CategoriesSelect from "../_components/CategoriesSelect";
 import { useRouter } from "next/navigation";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { supabase } from "@/utils/supabase";
-import { v4 as uuidv4 } from 'uuid'  // 固有IDを生成するライブラリ
-
+import { v4 as uuidv4 } from "uuid"; // 固有IDを生成するライブラリ
 
 const Page = () => {
   const [formValues, setFormValues] = useState<NewPost>({
@@ -31,37 +30,37 @@ const Page = () => {
   };
 
   //画像アップロード
-  const handleImageChange = async (
-    e: any
-  ): Promise<void> => {
+  const handleImageChange = async (e: any): Promise<void> => {
     if (!e.target.files || e.target.files.length === 0) {
       //画像が選択されていないのでreturn
-      return
+      return;
     }
 
     //選択された画像を取得
     const file = e.target.files[0];
     //ファイルパスを指定
-    const filePath = `private/${uuidv4()}`
+    const filePath = `private/${uuidv4()}`;
 
     //Supabaseに画像をアップロード
     const { data, error } = await supabase.storage
-      .from('post_thumbnail') // ここでバケット名を指定
+      .from("post_thumbnail") // ここでバケット名を指定
       .upload(filePath, file, {
-        cacheControl: '3600',
+        cacheControl: "3600",
         upsert: false,
-      })
+      });
 
     // アップロードに失敗したらエラーを表示して終了
     if (error) {
-      alert(error.message)
-      return
+      alert(error.message);
+      return;
     }
 
     console.log(data);
 
     // data.pathに、画像固有のkeyが入っているので、thumbnailImageKeyに格納する
-    setFormValues({...formValues, thumbnailImageKey: data.path});
+    setFormValues({ ...formValues, thumbnailImageKey: data.path });
+
+    console.log(formValues);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -116,7 +115,7 @@ const Page = () => {
           className="p-3 border-gray-400 border rounded-sm mt-2 mb-4"
         ></textarea>
 
-        <label htmlFor="thumnbnailImageKey" className="text-sm text-gray-700">
+        <label htmlFor="thumbnailImageKey" className="text-sm text-gray-700">
           サムネイル
         </label>
         <input
@@ -146,5 +145,3 @@ const Page = () => {
 };
 
 export default Page;
-
-
