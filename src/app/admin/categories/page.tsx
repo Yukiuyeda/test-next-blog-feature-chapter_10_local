@@ -6,13 +6,16 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const Page = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>([])
 
   //ログイン者にしか知りえないtoken
   const { token } = useSupabaseSession();
 
   //全カテゴリー取得
   useEffect(() => {
+
+    // console.log(`tokenは${token}`)
+
     if (!token) return;
 
     const getAllCategories = async () => {
@@ -22,6 +25,9 @@ const Page = () => {
           Authorization: token,
         },
       });
+
+      // console.log(`tokenは${token}`)
+
       const { categories } = await res.json();
       
       setCategories(categories);

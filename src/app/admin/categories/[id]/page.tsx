@@ -29,7 +29,7 @@ const Page = () => {
     };
 
     fetcher();
-  }, []);
+  }, [token]);
 
   //カテゴリー作成
   const handleSubmit = async (e: React.FormEvent) => {
