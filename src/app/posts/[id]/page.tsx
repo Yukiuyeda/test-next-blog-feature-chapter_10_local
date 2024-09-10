@@ -63,7 +63,7 @@ export const DetailPost: React.FC = () => {
   return (
     <div className="flex flex-col p-4 max-w-[800px] pt-10 mx-auto my-0">
       {thumbnailImageUrl && (
-        <div className="mt-2">
+        <div className="mt-2 px-4 mx-auto">
           <Image
             src={thumbnailImageUrl}
             alt="thumbnail"

@@ -7,6 +7,12 @@ const nextConfig = {
                 hostname: 'placehold.jp',
                 port: '',
                 pathname: '/800x400.png'
+            },
+            {
+                protocol: 'https',
+                hostname: 'pnvhswegqgcpzmgrctab.supabase.co',
+                port: '',
+                
             }
         ]
     }
