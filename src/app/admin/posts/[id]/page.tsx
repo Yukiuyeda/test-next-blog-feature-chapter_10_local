@@ -3,12 +3,13 @@
 import { Category } from "@/app/_types/category";
 import { NewPost } from "@/app/_types/newpost";
 import React, { SelectHTMLAttributes, useEffect, useState } from "react";
-import CategoriesSelect from "../_components/CategoriesSelect";
+// import CategoriesSelect from "../_components/CategoriesSelect";
 import { useParams, useRouter } from "next/navigation";
 import { Post } from "@/app/_types/post";
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { supabase } from "@/utils/supabase";
 import { v4 as uuidv4 } from "uuid"; // 固有IDを生成するライブラリ
+import PostForm from "../_components/PostForm";
 
 const Page = () => {
   const [formValues, setFormValues] = useState<NewPost>({
@@ -22,46 +23,6 @@ const Page = () => {
   const { id } = useParams();
   const router = useRouter();
   const { token } = useSupabaseSession();
-
-  const handleChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
-  };
-
-  //画像アップロード
-  const handleImageChange = async (e: any): Promise<void> => {
-    if (!e.target.files || e.target.files.length === 0) {
-      //画像が選択されていないのでreturn
-      return;
-    }
-
-    //選択された画像を取得
-    const file = e.target.files[0];
-    //ファイルパスを指定
-    const filePath = `private/${uuidv4()}`;
-
-    //Supabaseに画像をアップロード
-    const { data, error } = await supabase.storage
-      .from("post_thumbnail") // ここでバケット名を指定
-      .upload(filePath, file, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-
-    // アップロードに失敗したらエラーを表示して終了
-    if (error) {
-      alert(error.message);
-      return;
-    }
-
-    console.log(data);
-
-    // data.pathに、画像固有のkeyが入っているので、thumbnailImageKeyに格納する
-    setFormValues({ ...formValues, thumbnailImageKey: data.path });
-  };
 
   //現状の内容表示
   useEffect(() => {
@@ -133,68 +94,15 @@ const Page = () => {
   };
 
   return (
-    <div>
-      <h2 className="font-bold text-xl mb-6">記事作成ページ</h2>
-      <form className="flex flex-col" onSubmit={handleSubmit}>
-        <label htmlFor="title" className="text-sm text-gray-700">
-          タイトル
-        </label>
-        <input
-          id="title"
-          name="title"
-          onChange={handleChange}
-          value={formValues.title}
-          className="p-3 border-gray-400 border rounded-sm mt-2 mb-4"
-        />
-
-        <label htmlFor="content" className="text-sm text-gray-700">
-          内容
-        </label>
-        <textarea
-          id="content"
-          name="content"
-          onChange={handleChange}
-          value={formValues.content}
-          className="p-3 border-gray-400 border rounded-sm mt-2 mb-4"
-        ></textarea>
-
-        <label htmlFor="thumnbnailImageKey" className="text-sm text-gray-700">
-          サムネイル
-        </label>
-        <input
-          type="file"
-          id="thumbnailImageKey"
-          name="thumbnailImageKey"
-          onChange={handleImageChange}
-          accept="image/*"
-          className="p-3 border-gray-400 border rounded-sm mt-2 mb-4"
-        />
-
-        <label htmlFor="categories" className="text-sm text-gray-700">
-          カテゴリー
-        </label>
-        {/* カテゴリー選択コンポーネント */}
-        <CategoriesSelect selected={categories} setSelected={setCategories} />
-
-        {/* 更新ボタン */}
-        <div className="flex">
-          <button
-            type="submit"
-            className="flex justify-center w-[70px] mt-10 py-2 my-auto px-4 text-white border-gray-400 bg-green-500 rounded hover:cursor hover:bg-green-700 transition-all"
-          >
-            更新
-          </button>
-
-          <button
-            type="button"
-            className="flex justify-center w-[70px] mt-10 ml-4 py-2 px-4 text-white border-gray-400 bg-red-500 rounded hover:cursor hover:bg-red-700 transition-all"
-            onClick={handleDelete}
-          >
-            削除
-          </button>
-        </div>
-      </form>
-    </div>
+    <PostForm
+      newMode={false}
+      onSubmit={handleSubmit}
+      onDelete={handleDelete}
+      formValues={formValues}
+      setFormValues={setFormValues}
+      categories={categories}
+      setCategories={setCategories}
+    />
   );
 };
 

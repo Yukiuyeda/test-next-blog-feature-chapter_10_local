@@ -3,6 +3,7 @@
 import { useSupabaseSession } from "@/app/_hooks/useSupabaseSession";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import CategoriesForm from "../_components/CategoriesForm";
 
 const Page = () => {
   const [name, setName] = useState<string>("");
@@ -12,15 +13,14 @@ const Page = () => {
 
   //input欄に現在のカテゴリーを表示
   useEffect(() => {
-
     if (!token) return;
 
     const fetcher = async () => {
       const res = await fetch(`/api/admin/categories/${id}`, {
         headers: {
-          'Content-Type': 'Application/json',
+          "Content-Type": "Application/json",
           Authorization: token,
-        }
+        },
       });
       const { category } = await res.json();
       // console.log(category);
@@ -41,7 +41,7 @@ const Page = () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token
+        Authorization: token,
       },
       body: JSON.stringify({ name }),
     });
@@ -60,9 +60,9 @@ const Page = () => {
     await fetch(`/api/admin/categories/${id}`, {
       method: "DELETE",
       headers: {
-        'Content-Type': 'Application/json',
-        Authorization: token
-      }
+        "Content-Type": "Application/json",
+        Authorization: token,
+      },
     });
 
     window.alert("カテゴリーを削除しました");
@@ -72,38 +72,12 @@ const Page = () => {
   };
 
   return (
-    <div>
-      <h2 className="font-bold text-xl mb-6">カテゴリー作成ページ</h2>
-      <form onSubmit={handleSubmit} className="flex flex-col">
-        <label htmlFor="name" className="text-sm text-gray-700">
-          カテゴリー
-        </label>
-        <input
-          id="name"
-          name="name"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-          className="p-3 border-gray-400 border rounded-sm mt-2 mb-4 w-[300px]"
-        />
-        {/* 更新ボタン */}
-        <div className="flex">
-          <button
-            type="submit"
-            className="flex justify-center w-[70px] mt-10 py-2 my-auto px-4 text-white border-gray-400 bg-green-500 rounded hover:cursor hover:bg-green-700 transition-all"
-          >
-            更新
-          </button>
-
-          <button
-            type="button"
-            className="flex justify-center w-[70px] mt-10 ml-4 py-2 px-4 text-white border-gray-400 bg-red-500 rounded hover:cursor hover:bg-red-700 transition-all"
-            onClick={handleDelete}
-          >
-            削除
-          </button>
-        </div>
-      </form>
-    </div>
+    <CategoriesForm
+      newMode={false}
+      onSubmit={handleSubmit}
+      name={name}
+      setName={setName}
+    />
   );
 };
 
